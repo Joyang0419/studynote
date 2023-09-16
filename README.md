@@ -1,2 +1,5 @@
 # studynote
-刷題筆記
+- 讀書筆記
+
+# leetcode
+- 存放leetcode的刷題筆記,
