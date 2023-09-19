@@ -16,7 +16,7 @@ Space complexity: O(1)
 Boyer–Moore majority vote algorithm(摩爾投票算法)
 這個算法的核心在於，
 刪去一個數列中的兩個不同的數字，不會影響該數列的majority element。
-假想有一群人要投票，候選人有A、B、C，假設A已知會過半數的話，
+假想有一群人要投票，候選人有A、B、C，假設A已知會「過半數」的話，
 任取其中2個人取消他們的投票資格，會有以下的狀況：
 
 被取消資格的是B跟C -> 顯然A還是過半數(而且比例更高了XD)
@@ -40,22 +40,22 @@ func majorityElement(nums []int) int {
 		count--
 	}
 
-	//return candidate
+	return candidate
 	// 下面這一段未必要, 可以直接 return candidate
 	// Optional: check if the candidate is actually the majority element
-	count = 0
-	for _, num := range nums {
-		if num == candidate {
-			count++
-		}
-	}
-
-	if count > len(nums)/2 {
-		return candidate
-	}
-
-	// 這是一個好習慣 This shouldn't happen if we know there's a majority element in the list.
-	return -1
+	//count = 0
+	//for _, num := range nums {
+	//	if num == candidate {
+	//		count++
+	//	}
+	//}
+	//
+	//if count > len(nums)/2 {
+	//	return candidate
+	//}
+	//
+	//// 這是一個好習慣 This shouldn't happen if we know there's a majority element in the list.
+	//return -1
 }
 
 func TestMajorityElement(t *testing.T) {
@@ -82,14 +82,26 @@ func TestMajorityElement(t *testing.T) {
 				result: 3,
 			},
 		},
+		{
+			name: "2",
+			args: args{
+				nums: []int{3, 1, 3, 4, 3, 4, 1, 4, 3, 3, 3, 3, 3, 5},
+			},
+			expected: expected{
+				result: 3,
+			},
+		},
 	}
 
 	for _, tc := range testCases {
-		assert.Equal(
-			t,
-			tc.expected.result,
-			majorityElement(tc.args.nums),
-			fmt.Sprintf("testCase name: %s", tc.name),
-		)
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(
+				t,
+				tc.expected.result,
+				majorityElement(tc.args.nums),
+				fmt.Sprintf("testCase name: %s", tc.name),
+			)
+		})
+
 	}
 }
