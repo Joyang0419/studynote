@@ -18,20 +18,23 @@ Space complexity:  O(n)
 3. 我们检查 sum - k 的值是否存在于 prefixSumCounts 中。如果存在，我们更新 count 为 count + prefixSumCounts[sum - k]。
 4. 我们更新 prefixSumCounts[sum] 的值为 prefixSumCounts[sum] + 1，以记录当前的前缀和。
 5. 最后，我们返回 count 作为结果。
+
+prevSum通常用于表示从数组的开始到当前索引的累积和
 */
 func subarraySum(nums []int, k int) int {
 	count := 0
-	sum := 0
+	prefixSum := 0
+	// 哈希表来存储每个前缀和以及对应的前缀和出现的次数。
 	prefixSumCounts := make(map[int]int)
 	prefixSumCounts[0] = 1 // 初始化为1，处理整个数组都是解的情况
 
 	for _, num := range nums {
-		sum += num
-		key := sum - k
-		if val, exists := prefixSumCounts[key]; exists {
-			count += val
+		prefixSum += num
+		key := prefixSum - k
+		if prevCount, exists := prefixSumCounts[key]; exists {
+			count += prevCount
 		}
-		prefixSumCounts[sum]++
+		prefixSumCounts[prefixSum]++
 	}
 
 	return count
@@ -60,6 +63,16 @@ func TestSubarraySum(t *testing.T) {
 			},
 			expected: expected{
 				result: 2,
+			},
+		},
+		{
+			name: "2",
+			args: args{
+				nums: []int{1, 2, 3, 4}, // [2,3]
+				k:    1,
+			},
+			expected: expected{
+				result: 1,
 			},
 		},
 	}

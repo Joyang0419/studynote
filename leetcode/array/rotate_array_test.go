@@ -30,25 +30,6 @@ func getRotateIdx(current, rotate, length int) int {
 	return (current + rotate) % length
 }
 
-//func rotate(nums []int, k int) {
-//	if len(nums) < k {
-//		k = k % len(nums)
-//		if k == 0 {
-//			return
-//		}
-//	}
-//	arr := make([]int, len(nums))
-//	copy(arr, nums)
-//	cutPoint := len(arr) - k
-//	for i := 0; i < len(arr); i++ {
-//		if cutPoint >= len(arr) {
-//			cutPoint = 0
-//		}
-//		nums[i] = arr[cutPoint]
-//		cutPoint++
-//	}
-//}
-
 func TestRotate(t *testing.T) {
 	type args struct {
 		nums []int
