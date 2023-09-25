@@ -27,31 +27,25 @@ You must write an algorithm that runs in O(n) time and without using the divisio
 */
 func productExceptSelf(nums []int) []int {
 	length := len(nums)
-
 	// 初始化左側和右側的乘積陣列
 	left := make([]int, length)
 	right := make([]int, length)
-
 	// output 用於存儲最終結果
 	output := make([]int, length)
-
 	// 計算左側的乘積
 	left[0] = 1
 	for i := 1; i < length; i++ {
 		left[i] = left[i-1] * nums[i-1]
 	}
-
 	// 計算右側的乘積
 	right[length-1] = 1
 	for i := length - 2; i >= 0; i-- {
 		right[i] = right[i+1] * nums[i+1]
 	}
-
 	// 組合左側和右側的乘積
 	for i := 0; i < length; i++ {
 		output[i] = left[i] * right[i]
 	}
-
 	return output
 }
 
