@@ -85,6 +85,15 @@ func TestFindMaxLength(t *testing.T) {
 				result: 2,
 			},
 		},
+		{
+			name: "4",
+			args: args{
+				nums: []int{0, 1, 1, 0, 0, 0, 0, 1}, // []
+			},
+			expected: expected{
+				result: 4,
+			},
+		},
 	}
 
 	for _, tc := range testCases {
