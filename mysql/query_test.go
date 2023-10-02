@@ -1,13 +1,14 @@
 package mysql
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestClientFactory(t *testing.T) {
-	db, err := ClientFactory(
+func TestMigrateUsersTable(t *testing.T) {
+	db, err := GormMySqlFactory(
 		"root",      /* username */
 		"root",      /* password  */
 		"tcp",       /* network */
@@ -16,11 +17,11 @@ func TestClientFactory(t *testing.T) {
 		"testdb",    /* database */
 	)
 	assert.NoError(t, err)
-	assert.NoError(t, db.Ping())
+	assert.NoError(t, db.AutoMigrate(&User{}))
 }
 
-func TestGormMySqlFactory(t *testing.T) {
-	_, err := GormMySqlFactory(
+func TestQuery_UsersByName(t *testing.T) {
+	db, err := GormMySqlFactory(
 		"root",      /* username */
 		"root",      /* password  */
 		"tcp",       /* network */
@@ -29,4 +30,8 @@ func TestGormMySqlFactory(t *testing.T) {
 		"testdb",    /* database */
 	)
 	assert.NoError(t, err)
+	q := Query{db: db}
+	users, err := q.UsersByName("joy")
+	assert.NoError(t, err)
+	fmt.Println(users)
 }
