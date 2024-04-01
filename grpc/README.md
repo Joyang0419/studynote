@@ -1,19 +1,26 @@
 # Grpc
 
 - [概念](#概念)
-- [操作流程](#操作流程)
+  - [連線類型](#連線類型)
+  - [資料型別](#資料型別)
+
+- Install the protocol compiler plugins for Go using the following command
+```shell
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+```
 
 ## 概念
 - gRPC 是建立在HTTP/2上的通訊協定，gRPC 可以protocol buffers定義訊息的格式，gRPC 可以使用任何語言實作。
 ![img.png](images/img.png)
 - 資料傳送的時候是message binary format，該數字是用來定位該欄位。而數字1-15 是只用了 1 byte encode， 16-2047 用了 2 btyes encode ，所以建議常用的欄位可以放在前 15 個欄位，可以多少減少一些資料的傳送量。
-### 四種類型
+### 連線類型
 ![img_1.png](images/img_1.png)
 - Unary：類似傳統 API，client 發送 request 而 server 回傳 response
 - Server Streaming：透過 HTTP/2，client 發送一次 request，而 server 可以回傳多次資料
 - Client Streaming：client 發送多次資料，直到告知 server 資料傳完後，server 再給予 response
 - Bi Directional Streaming：兩邊都用串流的方式傳送資料
-### proto提供的資料型別
+### 資料型別
 - 以下是 proto3 的一些基本資料類型：
 - 雙精度浮點數: double
 - 單精度浮點數: float
@@ -37,33 +44,6 @@
   - message: 定義一個結構化的數據類型，可以包含多個字段。
   - repeated: 用於表示一個字段可以有多個值。
   - map: 一個鍵值對集合。例如: map<string, int32> name_to_id;
-## 操作流程
-- 撰寫proto, 一種定義interface的感覺
-- 定義完後，你要使用google的command code generate, 會自動產生兩個檔案
-  - pb.go: proto buffer怎麼溝通，by the way 我是沒去花很多時間特別理解
-  - _grpc.pb.go: 我覺得這邊比較重要， 
-  `NewTransactionClient`, 就是client要用的 
-  `TransactionServer`, 為何我會說proto很像是interface, 因為就是就是用指令包code gen產生這個interface, 然後你要去implement他, 
-    ```shell
-    # example
-    # protoc --go_out=. --go_opt=paths=source_relative \
-    #    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    #   {path}
-    #
-    # 下方是實際的
-    protoc --go_out=. --go_opt=paths=source_relative \
-        --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-        grpc/service/transaction/transaction.proto
-    ```
-- 實作TransactionServer, 可以看transaction/server.go
-- server factory, 可以看server.go ```NewGrpcServer```
-- 之後run server && run client, 可以看
-  - TestNewGrpcServer(啟動server)
-  - client應用
-    - TestNewGrpcServerBalance
-    - TestNewGrpcServerDeposits
-    - TestNewGrpcServerWithdraw
-
 ## Recap
 - protobuf 比 json 小，並且傳輸更快，我認為光這點就值得考慮用這個取代restful api
 - grpc有四種類型, 基本上可以應用在很多業務情境
